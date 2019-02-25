@@ -8,13 +8,15 @@
     <p id = "quote1"> </p>
     <button onclick="quote()" >clickME</button>
     <button onclick="joke()" >clickME</button>
-    <button onclick="shareQuote()" > shareME </button>
+    <button onclick="shareQuote()" > ShareQuote </button>
+    <button onclick="shareJoke()" > ShareJoke</button>
     <h3> share link </h3> 
     <p id="share"> </p>
     <!-- quotes GET -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
             var currentQuotes;
+            var currentJoke;
             function quote() {
                 $.getJSON("http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1&r={random_num}").then(function(response){
                     document.getElementById("quote1").innerHTML = response[0].content;
@@ -38,6 +40,23 @@
                         }
                     );
             }
+            
+            function shareJoke(){
+                
+                $.ajax(
+                        {
+                            method: "POST",
+                            url: "https://file.io",
+                            data: {'text': currentQuotes,
+                                   'format': "json"
+                            },
+                            success: function(result) {
+                                document.getElementById("share").innerHTML = result.link;
+                            
+                            }
+                        }
+                    );
+            }
     </script>
     <!-- quotes GET script -->
     
@@ -46,6 +65,8 @@
             function joke() {
                 $.getJSON("https://geek-jokes.sameerkumar.website/api").then(function(response){
                     document.getElementById("quote1").innerHTML = response;
+                    currentJoke = response;
+                    
                 });
             }
     </script>
